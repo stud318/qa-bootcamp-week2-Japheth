@@ -7,6 +7,7 @@ test.describe("Toolshop UI Tests", () => {
     await expect(page).toHaveTitle(
       "Practice Software Testing - Toolshop - v5.0",
     );
+    // await expect(page).toHaveTitle("Incorrect Title 123");
   });
 
   //   test('Search for "pliers" returns matching products', async ({ page }) => {
