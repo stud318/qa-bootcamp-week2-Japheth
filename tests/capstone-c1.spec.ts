@@ -13,6 +13,7 @@ test.describe("Capstone C1 - Search by name", () => {
     const firstProduct = page.locator(".card-title").first();
 
     // This dynamically waits for the text to appear and uses a regex to ignore case
+
     await expect(firstProduct).toHaveText(/pliers/i);
   });
 });

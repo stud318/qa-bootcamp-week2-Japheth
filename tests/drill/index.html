@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Flakiness Drill</title>
+    <style>
+      #message {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Flakiness Drill</h1>
+    <button id="saveBtn" onclick="saveData()">Save</button>
+    <div id="message"></div>
+
+    <script>
+      function saveData() {
+        document.getElementById("message").innerText = "";
+        // Random delay between 0 and 3000 milliseconds (3 seconds)
+        const randomDelay = Math.floor(Math.random() * 3000);
+
+        setTimeout(() => {
+          document.getElementById("message").innerText =
+            "Data saved successfully!";
+        }, randomDelay);
+      }
+    </script>
+  </body>
+</html>
