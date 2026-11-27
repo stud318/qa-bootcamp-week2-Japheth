@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 
 export class InventoryPage {
   readonly page: Page;
@@ -9,14 +9,16 @@ export class InventoryPage {
 
   constructor(page: Page) {
     this.page = page;
-    // Locators
     this.searchBox = page.getByRole("textbox", { name: "Search" });
     this.firstProduct = page.locator(".card-title").first();
-    this.addToCartBtn = page.getByRole("button", { name: "Add to cart" });
-    this.cartBadge = page.locator(".badge.rounded-pill.bg-danger");
+    // Use the data-test attribute you just found!
+    this.addToCartBtn = page.locator('[data-test="add-to-cart"]');
+    // Use role-based locator for the cart link/badge
+    this.cartBadge = page
+      .getByRole("link", { name: /cart/i })
+      .locator(".badge");
   }
 
-  // Actions
   async goto() {
     await this.page.goto("/");
   }
@@ -24,14 +26,11 @@ export class InventoryPage {
   async searchForProduct(productName: string) {
     await this.searchBox.fill(productName);
     await this.searchBox.press("Enter");
-    // Wait for results to appear conditionally
-    await expect(this.firstProduct).toBeVisible();
+    await this.firstProduct.waitFor();
   }
 
   async addFirstProductToCart() {
     await this.firstProduct.click();
-
-    // Wait for the cart API call to succeed before checking UI
     await Promise.all([
       this.page.waitForResponse(
         (response) =>
@@ -39,9 +38,5 @@ export class InventoryPage {
       ),
       this.addToCartBtn.click(),
     ]);
-  }
-
-  async verifyCartCount(expectedCount: string) {
-    await expect(this.cartBadge).toHaveText(expectedCount);
   }
 }
